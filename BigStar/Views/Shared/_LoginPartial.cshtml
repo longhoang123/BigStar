@@ -1,0 +1,23 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using BigStar.Areas.Identity.Data
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    var user = UserManager.GetUserAsync(User).Result;
+    var name = user != null ? $"{user.FirstName} {user.LastName}" : "";
+}
+
+<ul class="navbar-nav d-flex flex-row">
+@if (SignInManager.IsSignedIn(User))
+{
+    <li class="nav-item">
+            <a id="manage" class="nav-link text-dark" title="Manage">Hello @name!</a>
+    </li>
+    <li class="nav-item ms-1">
+        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <button id="logout" type="submit" class="nav-link btn btn-link text-dark"><i class="fa-solid fa-right-from-bracket"></i></button>
+        </form>
+    </li>
+}
+</ul>

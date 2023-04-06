@@ -1,0 +1,50 @@
+﻿@using BigStar.Models.Data
+@model List<MovieModel>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
+        @foreach (var item in Model)
+        {
+            <div class="cols my-1 my-md-2">
+                <p class="movie-title">@item.Title</p>
+                <img src="@item.ImageUrl" class="mb-2"/>
+                <div class="d-flex justify-content-between align-items-center">
+                    <p>(@item.LikeCount) likes</p>
+                        <button onclick="likeBtnClicked(@item.Id)" class="btn btn-primary">
+                            <i class="fa-solid fa-thumbs-up"></i>
+                        </button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+        var scrollpos = localStorage.getItem('scrollpos');
+        if (scrollpos) window.scrollTo(0, scrollpos);
+    });
+
+    window.onbeforeunload = function (e) {
+        localStorage.setItem('scrollpos', window.scrollY);
+    };
+    function likeBtnClicked(id) {
+        $.ajax({
+            cache: false,
+            url: "@Html.Raw(Url.Action("Like", "Home"))",
+            type: "POST",
+            data: {
+                "id": id
+            },
+            success: function (data, textStatus, jqXHR) {
+                location.reload();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                
+            }
+        });
+        
+    }
+</script>
